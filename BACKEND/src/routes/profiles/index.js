@@ -82,6 +82,24 @@ profileRouter.post('/:username/picture', upload.single('user'), async(req, res, 
   }
 })
 
-profileRouter.get('/:username/cv', async(req, res, next)=>{})
+profileRouter.get('/:username/cv', async(req, res, next)=>{
+    try {
+        // file as a stream (source) [--> transform optional] --> response (destination)
+        const source = fs.createReadStream(
+            path.join(imagePath, `${req.params.username}`)
+        )
+        res.setHeader(
+            "Content-Disposition",
+            `attachment; filename=${req.params.username}`
+        ) // please open "Save file to disk window" in browsers
+        source.pipe(res)
+
+        source.on("error", (error) => {
+            next(error)
+        })
+    } catch (error) {
+        next(error)
+    }
+})
 
 module.exports = profileRouter
