@@ -4,11 +4,20 @@ const cors = require("cors")
 const { join } = require("path")
 const listEndpoints = require("express-list-endpoints")
 const mongoose = require("mongoose")
-const port = process.env.PORT
+
+const profileRouter = require('./routes/profiles')
 
 const server = express()
+const port = process.env.PORT
 
+
+const staticFolderPath = join(__dirname, "../public")
+server.use(express.static(staticFolderPath))
 server.use(express.json())
+
+server.use(cors())
+
+server.use("/profiles", profileRouter)
 
 console.log(listEndpoints(server))
 
