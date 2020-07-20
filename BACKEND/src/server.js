@@ -5,11 +5,11 @@ const { join } = require("path")
 const listEndpoints = require("express-list-endpoints")
 const mongoose = require("mongoose")
 const port = process.env.PORT
-
+const experienceRouter = require("./routes/experience")
 const server = express()
 
 server.use(express.json())
-
+server.use("/experiences", experienceRouter)
 console.log(listEndpoints(server))
 
 mongoose
@@ -23,3 +23,4 @@ mongoose
         })
     )
     .catch((err) => console.log(err))
+
