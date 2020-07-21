@@ -84,8 +84,8 @@ experienceRouter.post("/:id/image", upload.single('image'), async (req, res, nex
         } else {
             res.send("Not exist")
         }
-    } catch (err) {
-        next(err)
+    } catch (error) {
+        next(error)
     }
 })
 
