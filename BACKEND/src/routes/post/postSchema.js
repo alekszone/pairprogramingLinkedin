@@ -3,26 +3,31 @@ const mongoose = require("mongoose")
 
 
 const post = new Schema({
-
+text:{
+    type:String
+},
 name:{
     type:String,
-    required: true,
+    required: true    
 },
 username : {
-    type:String
+    type:String,
+    required:true
 },
-// user:[{
-// //   type :Schema.Types.ObjectId , ref:"profile"
-// }],
+user:[{
+  type:Schema.Types.ObjectId , ref:"profiles"
+}],
 image:{
-    type:String
+    type:String,
+    
 },
  },
 {
 timestamps:true
 })
-// post.static("addProfile", async function(id){
-//     const profile = await PostsModel.findOne({_id:id}).populate("user")
-// })
+post.static("addProfile", async function(id){
+    const profile = await PostsModel.findOne({_id:id}).populate("user")
+    return profile
+})
 
 module.exports = mongoose.model("posts", post)

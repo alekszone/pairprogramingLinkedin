@@ -12,7 +12,7 @@ const imagePath = path.join(__dirname,"../../../post/image")
 post.get("/", async(req,res,next)=>{
 try{
     const query = q2m(req.query)
-    const posts = await mongo.find(query.criteria, query.options.fields)
+    const posts = await mongo.find(query.criteria, query.options.fields).populate("user")
         .skip(query.options.skip)
         .limit(query.options.limit)
         .sort(query.options.sort)
@@ -32,7 +32,7 @@ next(err)
 })
 post.post("/",async (req,res,next)=>{
 try{ 
-  
+ 
 const newPost =  new mongo(  req.body )
  await newPost.save()
 res.send( "Added" )
