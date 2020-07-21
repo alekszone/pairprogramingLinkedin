@@ -4,7 +4,7 @@ const fs = require('fs-extra')
 const multer = require('multer')
 const q2m = require('query-to-mongo')
 
-const profileModel = require("./schema")
+const ProfileModel = require("./schema")
 const profileRouter = express.Router()
 const upload = multer()
 const port = process.env.PORT
@@ -14,7 +14,7 @@ profileRouter.get('/', async(req, res, next)=>{
     try {
         const query = q2m(req.query)
         console.log(query)
-        const users = await profileModel.find(query.criteria, query.options.fields)
+        const users = await ProfileModel.find(query.criteria, query.options.fields)
         .skip(query.options.skip)
         .limit(query.options.limit)
         .sort(query.options.sort)
@@ -26,7 +26,7 @@ profileRouter.get('/', async(req, res, next)=>{
 
 profileRouter.get('/:username', async(req, res, next)=>{
     try {
-        const user = await profileModel.findOne({'username': req.params.username})
+        const user = await ProfileModel.findOne({'username': req.params.username})
         if(user){
             res.status(200).send(user)
         }
@@ -38,7 +38,7 @@ profileRouter.get('/:username', async(req, res, next)=>{
 
 profileRouter.post('/', async(req, res, next)=>{
     try {
-        const newUser = new profileModel(req.body)
+        const newUser = new ProfileModel(req.body)
         const {_id} = await newUser.save()
         res.status(200).send(_id)
     } catch (error) {
@@ -48,7 +48,7 @@ profileRouter.post('/', async(req, res, next)=>{
 
 profileRouter.put('/:username', async(req, res, next)=>{
     try {
-        const user = await profileModel.findOneAndUpdate(req.params.username, req.body)
+        const user = await ProfileModel.findOneAndUpdate({'username': req.params.username}, req.body)
         if (user) {
           res.send("Record updated!")
         } else {
@@ -69,7 +69,7 @@ profileRouter.post('/:username/picture', upload.single('user'), async(req, res, 
     req.body = {
       image: `http://127.0.0.1:${port}/image/profile/${req.params.username}.jpg`
     }
-    const user = await profileModel.findOneAndUpdate(req.params.username, req.body)
+    const user = await ProfileModel.findOneAndUpdate({'username': req.params.username}, req.body)
     if (user) {
       res.send("Record updated!")
     } else {
@@ -84,14 +84,13 @@ profileRouter.post('/:username/picture', upload.single('user'), async(req, res, 
 
 profileRouter.get('/:username/cv', async(req, res, next)=>{
     try {
-        // file as a stream (source) [--> transform optional] --> response (destination)
         const source = fs.createReadStream(
             path.join(imagePath, `${req.params.username}`)
         )
         res.setHeader(
             "Content-Disposition",
             `attachment; filename=${req.params.username}`
-        ) // please open "Save file to disk window" in browsers
+        ) 
         source.pipe(res)
 
         source.on("error", (error) => {
