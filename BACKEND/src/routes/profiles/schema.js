@@ -47,6 +47,6 @@ const ProfileSchema = new Schema({
       
 },{ timestamps: true })
 
-const ProfileModel = model("Profile", ProfileSchema)
+const ProfileModel = model("profiles", ProfileSchema)
 module.exports = ProfileModel
 
