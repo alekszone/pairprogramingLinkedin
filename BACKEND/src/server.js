@@ -13,6 +13,13 @@ const server = express()
 
 
 
+const {
+    notFoundHandler,
+    badRequestHandler,
+    otherGenericErrorHandler,
+    newlyDefinedErrorHandler,
+  } = require("./errorHandler")
+
 
 server.use(express.static(staticFolderPath))
 server.use(express.json())
@@ -27,6 +34,11 @@ server.use(badRequestHandler)
 server.use(notFoundHandler)
 server.use(genericErrorHandler)
 
+
+server.use(notFoundHandler)
+server.use(badRequestHandler)
+server.use(newlyDefinedErrorHandler)
+server.use(otherGenericErrorHandler)
 
 console.log(listEndpoints(server))
 

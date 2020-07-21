@@ -16,6 +16,13 @@ const ProfileSchema = new Schema({
         required: true,
         unique: true,
         lowercase: true,
+        validate: {
+            validator: async (value) => {
+                if(!v.isEmail(value)){
+                    throw new Error("Email not valid!")
+                }
+            }
+        },
     },
     bio: {
         type: String,
@@ -35,6 +42,7 @@ const ProfileSchema = new Schema({
     username: {
         type: String,
         required: true,
+        unique:true,
     },
       
 },{ timestamps: true })
