@@ -1,4 +1,7 @@
 const express = require("express")
+const path = require('path')
+const fs = require('fs-extra')
+const multer = require('multer')
 const q2m = require("query-to-mongo")
 
 const experienceSchema = require("./experienceSchema")
@@ -77,5 +80,26 @@ experienceRouter.delete("/:id", async (req, res, next) => {
     }
 })
 
+//upload a new image using the.
+experienceRouter.post('/:username/picture', upload.single('user'), async (req, res, next) => {
+
+    try {
+        await fs.writeFile(path.join(imagePath, `${req.params.username}.jpg`), req.file.buffer)
+
+        req.body = {
+            image: `http://127.0.0.1:${port}/image/profile/${req.params.username}.jpg`
+        }
+        const user = await profileModel.findOneAndUpdate(req.params.username, req.body)
+        if (user) {
+            res.send("Record updated!")
+        } else {
+            const error = new Error(`User with username ${req.params.username} not found`)
+            error.httpStatusCode = 404
+            next(error)
+        }
+    } catch (error) {
+        next(error)
+    }
+})
 
 module.exports = experienceRouter

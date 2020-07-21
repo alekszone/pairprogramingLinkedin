@@ -4,24 +4,23 @@ const cors = require("cors")
 const { join } = require("path")
 const listEndpoints = require("express-list-endpoints")
 const mongoose = require("mongoose")
-
+const staticFolderPath = join(__dirname, "../public")
 const profileRouter = require('./routes/profiles')
-
 const port = process.env.PORT
 const experienceRouter = require("./routes/experience")
-const post = require("./routes/post/index")
+const post = require("./routes/post")
 const server = express()
 
 
 
-const staticFolderPath = join(__dirname, "../public")
+
 server.use(express.static(staticFolderPath))
 server.use(express.json())
 
 server.use(cors())
 
-server.use("/profiles", profileRouter)
 server.use("/post", post)
+server.use("/profiles", profileRouter)
 server.use("/experiences", experienceRouter)
 
 server.use(badRequestHandler)
@@ -33,7 +32,7 @@ console.log(listEndpoints(server))
 
 
 
-mongoose.connect("mongodb://localhost:27017/linkedindb", {
+mongoose.connect("mongodb+srv://eriseld:troy1894@cluster0.j7g0j.mongodb.net/linkedindb", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
