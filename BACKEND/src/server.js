@@ -19,7 +19,7 @@ server.use(genericErrorHandler)
 
 console.log(listEndpoints(server))
 
-mongoose.connect("mongodb://localhost:27017/linkedindb", {
+mongoose.connect("mongodb+srv://eriseld:troy1894@cluster0.j7g0j.mongodb.net/linkedindb", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
