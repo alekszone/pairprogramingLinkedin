@@ -10,6 +10,13 @@ const profileRouter = require('./routes/profiles')
 const server = express()
 const port = process.env.PORT
 
+const {
+    notFoundHandler,
+    badRequestHandler,
+    otherGenericErrorHandler,
+    newlyDefinedErrorHandler,
+  } = require("./errorHandler")
+
 
 const staticFolderPath = join(__dirname, "../public")
 server.use(express.static(staticFolderPath))
@@ -18,6 +25,11 @@ server.use(express.json())
 server.use(cors())
 
 server.use("/profiles", profileRouter)
+
+server.use(notFoundHandler)
+server.use(badRequestHandler)
+server.use(newlyDefinedErrorHandler)
+server.use(otherGenericErrorHandler)
 
 console.log(listEndpoints(server))
 
